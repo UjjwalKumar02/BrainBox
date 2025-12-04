@@ -10,10 +10,14 @@ interface AddContentProps {
   refresh: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
+
+// share logic and sharable page
+// onshare : show confirmation component and the hit backend route and dispaly url and also option to see url again
+// offshare : can be done as switch
+// shareable page and show content
+// delete content option
 // responsive
 // deploy
-// share logic and sharable page
-// delete content
 // remove clg
 
 const AddContent = ({ open, setOpen, refresh }: AddContentProps) => {
