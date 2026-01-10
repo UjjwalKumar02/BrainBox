@@ -20,7 +20,7 @@ const Card = ({ type, title, link }: CardProps) => {
     <div className="w-[30%] min-h-60 bg-white border border-gray-300 rounded-xl py-6 px-8 space-y-4 h-fit">
       <div className="flex justify-between items-center">
         <Button variant="secondary" size="md" text={type} />
-        <Button variant="primary" size="md" text="Share" />
+        {/* <Button variant="primary" size="md" text="Share" /> */}
       </div>
 
       <h1>{title}</h1>
