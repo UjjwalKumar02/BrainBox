@@ -7,20 +7,10 @@ import axios from "axios";
 interface AddContentProps {
   open: boolean;
   setOpen: (arg: boolean) => void;
-  refresh: React.Dispatch<React.SetStateAction<boolean>>;
+  fetchContent: () => Promise<void>;
 }
 
-
-// share logic and sharable page
-// onshare : show confirmation component and the hit backend route and dispaly url and also option to see url again
-// offshare : can be done as switch
-// shareable page and show content
-// delete content option
-// responsive
-// deploy
-// remove clg
-
-const AddContent = ({ open, setOpen, refresh }: AddContentProps) => {
+const AddContent = ({ open, setOpen, fetchContent }: AddContentProps) => {
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
   const [type, setType] = useState("");
@@ -40,7 +30,7 @@ const AddContent = ({ open, setOpen, refresh }: AddContentProps) => {
     }
     setLoading(true);
     try {
-      await axios.post(
+      const response = await axios.post(
         `${BACKEND_URL}/api/v1/user/content`,
         {
           title: titleRef.current?.value,
@@ -54,7 +44,12 @@ const AddContent = ({ open, setOpen, refresh }: AddContentProps) => {
         }
       );
 
-      refresh((s) => !s);
+      if (response.status !== 200) {
+        alert("Request failed!");
+        return;
+      }
+
+      fetchContent();
     } catch (error) {
       alert(error);
     } finally {
@@ -81,7 +76,7 @@ const AddContent = ({ open, setOpen, refresh }: AddContentProps) => {
             <div className="flex items-center justify-center gap-2">
               <button
                 className={`${
-                  type === "video" ? "bg-red-400" : "bg-blue-400"
+                  type === "video" ? "bg-red-400" : "bg-neutral-400"
                 } text-white px-5 py-1 text-xs font-medium rounded-lg cursor-pointer`}
                 onClick={() => setType("video")}
               >
@@ -89,7 +84,7 @@ const AddContent = ({ open, setOpen, refresh }: AddContentProps) => {
               </button>
               <button
                 className={`${
-                  type === "tweet" ? "bg-red-400" : "bg-blue-400"
+                  type === "tweet" ? "bg-red-400" : "bg-neutral-400"
                 } text-white px-5 py-1 text-xs font-medium rounded-lg cursor-pointer`}
                 onClick={() => setType("tweet")}
               >
@@ -97,7 +92,7 @@ const AddContent = ({ open, setOpen, refresh }: AddContentProps) => {
               </button>
               <button
                 className={`${
-                  type === "note" ? "bg-red-400" : "bg-blue-400"
+                  type === "note" ? "bg-red-400" : "bg-neutral-400"
                 } text-white px-5 py-1 text-xs font-medium rounded-lg cursor-pointer`}
                 onClick={() => setType("note")}
               >

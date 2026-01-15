@@ -1,26 +1,61 @@
 import { useEffect } from "react";
 import Button from "./Button";
+import axios from "axios";
+import { DeleteIcon } from "../../icons/DeleteIcon";
 
 interface CardProps {
+  id: string;
   type: string;
   title: string;
   link: string;
+  fetchContent: () => Promise<void>;
 }
 
-const Card = ({ type, title, link }: CardProps) => {
+const Card = ({ id, type, title, link, fetchContent }: CardProps) => {
+  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+
   useEffect(() => {
     // Re-run Twitter embed processor when tweet blockquote is added
     if (type === "tweet" && window?.twttr?.widgets) {
       window.twttr.widgets.load();
     }
-    console.log("reloading...");
+    // console.log("reloading...");
   }, [type, link]);
 
+  async function deleteContent({ contentId }: { contentId: string }) {
+    try {
+      const res = await axios.delete(
+        `${BACKEND_URL}/api/v1/user/content/${contentId}`,
+        {
+          headers: {
+            Authorization: localStorage.getItem("token"),
+          },
+        }
+      );
+
+      if (res.status !== 200) {
+        alert("Delete request failed");
+        return;
+      }
+
+      fetchContent();
+    } catch (error) {
+      console.log(error);
+      throw new Error("Delete request failed!");
+    }
+  }
+
   return (
-    <div className="w-[30%] min-h-60 bg-white border border-gray-300 rounded-xl py-6 px-8 space-y-4 h-fit">
+    <div className="max-w-80 bg-white border border-gray-300 rounded-xl py-6 px-8 space-y-4 h-fit">
       <div className="flex justify-between items-center">
         <Button variant="secondary" size="md" text={type} />
         {/* <Button variant="primary" size="md" text="Share" /> */}
+        <button
+          onClick={() => deleteContent({ contentId: id })}
+          className="cursor-pointer"
+        >
+          <DeleteIcon />
+        </button>
       </div>
 
       <h1>{title}</h1>

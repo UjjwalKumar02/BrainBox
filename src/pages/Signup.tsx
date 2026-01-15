@@ -4,6 +4,7 @@ import Input from "../components/ui/Input";
 import Logo from "../icons/Logo";
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { MobileNav } from "../components/ui/MobileNav";
 
 const Signup = () => {
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
@@ -14,7 +15,10 @@ const Signup = () => {
   const [loading, setLoading] = useState(false);
 
   const onSignup = async () => {
-    if (usernameRef.current?.value === "" || passwordRef.current?.value === "") {
+    if (
+      usernameRef.current?.value === "" ||
+      passwordRef.current?.value === ""
+    ) {
       alert("All fields are required");
       return;
     }
@@ -36,7 +40,7 @@ const Signup = () => {
 
   return (
     <div className="flex">
-      <div className="bg-white min-h-screen min-w-[65%] border-r border-gray-300 flex flex-col gap-4 items-center justify-center">
+      <div className="lg:flex hidden bg-white min-h-screen min-w-[65%] border-r border-gray-300 flex-col gap-4 items-center justify-center">
         <div className="flex items-center gap-1">
           <Logo />
           <h1 className="text-3xl tracking-tighter font-medium">BrainBox</h1>
@@ -46,15 +50,10 @@ const Signup = () => {
       </div>
 
       <div className="min-h-screen flex flex-col gap-2 items-center justify-center bg-gray-100 w-full">
-        <div className="bg-white flex flex-col gap-8 py-8 px-10 rounded-lg border border-gray-300">
-          <h1 className="text-2xl text-center font-medium">
-            Signup
-          </h1>
-          <Input
-            reference={usernameRef}
-            type="text"
-            placeholder="username"
-          />
+        <MobileNav isLoggedIn={false} />
+        <div className="bg-white flex flex-col gap-8 py-8 lg:px-10 px-7 rounded-lg border border-gray-300">
+          <h1 className="text-2xl text-center font-medium">Signup</h1>
+          <Input reference={usernameRef} type="text" placeholder="username" />
           <Input
             reference={passwordRef}
             type="password"
